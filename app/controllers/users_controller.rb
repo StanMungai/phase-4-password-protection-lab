@@ -11,14 +11,18 @@ class UsersController < ApplicationController
     end
   end
 
+
   def show
-    user = User.find_by(id: params[:id])
-    if user 
-      render json: user 
-    else
-      render json: { errors: "user not found" }, status: :unauthorized
-      # render json: { errors: "user not found" }, status: :unprocessable_entity
-    end
+    # user = User.find_by(user_id: params[:id])
+    # if session[:user_id]
+    #   render json: user 
+    # else
+    #   render json: { errors: "user not found" }, status: :unauthorized
+    #   # render json: { errors: "user not found" }, status: :unprocessable_entity
+    # end
+    return render json:{error: "Not authorized"}, status: :unauthorized unless session.include? :user_id
+        user = User.find_by(id: session[:user_id])
+        render json: user, status: :ok
   end
 
   private
